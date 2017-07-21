@@ -1,0 +1,73 @@
+1- Afficher tous les tuples de la table auditeur
+
+SELECT * FROM AUDITEUR
+
+2- Afficher tous les tuples de la table inscription
+
+SELECT * FROM INSCRIPTION
+
+3- Afficher le nom de le prenom de tous les auditeurs
+
+SELECT a.NOM_AUDITEUR, a.PRENOM_AUDITEUR FROM AUDITEUR a
+
+4- Afficher les numero des auditeurs et les annees de la table inscription pour l’année 2010
+
+SELECT i.CODE_AUDITEUR, i.ANNEES_SCOLAIRE FROM INSCRIPTION i WHERE i.ANNEES_SCOLAIRE=2010
+
+5- Afficher les noms et prenoms des auditeurs et les années de la table inscription pour l’année
+
+2010
+
+SELECT a.NOM_AUDITEUR,a.PRENOM_AUDITEUR, i.ANNEES_SCOLAIRE 
+FROM INSCRIPTION i 
+INNER JOIN AUDITEUR a ON a.CODE_AUDITEUR=i.CODE_AUDITEUR
+WHERE i.ANNEES_SCOLAIRE=2010
+
+6- Idem que précedent pour les années inférieures à 2015 incluse.
+
+SELECT a.NOM_AUDITEUR,a.PRENOM_AUDITEUR, i.ANNEES_SCOLAIRE FROM INSCRIPTION i INNER JOIN AUDITEUR a ON a.CODE_AUDITEUR=i.CODE_AUDITEUR WHERE i.ANNEES_SCOLAIRE<=2015
+
+7- Afficher nom, prénom, année, ue.
+
+SELECT a.NOM_AUDITEUR,a.PRENOM_AUDITEUR, i.ANNEES_SCOLAIRE,u.CODE_UE
+FROM AUDITEUR a 
+INNER JOIN INSCRIPTION i ON i.CODE_AUDITEUR=a.CODE_AUDITEUR
+INNER JOIN INSCRIPTION_UE iu ON iu.CODE_AUDITEUR=i.CODE_AUDITEUR
+INNER JOIN UE u ON u.CODE_UE=iu.CODE_UE
+
+
+a) Explication générale:
+L'application permet de saisir des requetes SQL dans un formulaire, et de renvoyer la réponse à la requete en dessous, comme dans phpmyadmin, dans l'onglet sql ou l'on saisit directement les requetes en brut.
+
+b) Explication de chaque fichier :
+
+ui.js -> Permet juste de toucher au CSS de la balise Textarea et Button en fonction de la taille de l'écran
+
+style.css -> Simple feuille de style qui permet de toucher à l'aspect visuel de la page
+
+sqlqservice.view.html -> ici utiliser comme simple vue, une partie head, une partie body avec un textarea, un bouton et une div ou d'affichera les réponses via l'ajax
+
+index.php -> page presque inutile qui appelle un code html
+
+ajax.js -> ce code permet d'interagir avec le serveur de façon asynchrone, donc sans rafraichissement de page, il permet dans ce cas la, sur le clique du bouton, de lancer un script php qui envoi une requete au serveur, ensuite, la fonction AfficheResult() s'occupe d'avoir un affichage propre dans un tableau
+
+
+Amélioratons possible :
+
+-mettre le contenu de sqlservice.view.html dans index.php, cela permettra d'avoir un fichier en moins sans alourdir pour autant les chargments
+
+-le fichier ui.js peut etre retranscrit en css ce qui évitera de charger un script js en plus 
+
+-La structure de la base de données m'a fait mal au yeux, la table Années est inutile car relié a une seule table qui possède ce champ, alors qu'il y en a plusieurs, de plus il serait préférable de mettre une id si on garde cette table afin d'avoir moins de répétition (il faut mieux répéter une id qui vaut 10 voir 100 qu'un nombre comme 2017, cela prend moins de places)
+la table tarif est inutile car des valeurs décimals il peut y en avoir beaucoup, donc les id vont etre assez gros, donc autant mettre directement le tarif dans la table inscription et supprimer la table tarif
+
+-Dans les scripts JS il y a souvent des paramètres au fonction ou des variables qui ne sont pas utilisés, donc on utilise de la mémoire pour rien 
+
+- dans le CSS le display : block ne sert a rien 
+
+- Pour l'affichage du tableau je ne suis pas pas énormément penché dessus mais il me semble que la façon dont le tableau est généré est assez lourde, il doit y avoir une meilleure solution, comme renvoyé le resultat de la requete directement sous forme de tableau en touchant directement au php 
+
+
+
+
+

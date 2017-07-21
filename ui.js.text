@@ -1,0 +1,16 @@
+$(document).ready(function(){ // se lance après le chargement de la page
+	var wWidth = $(window).width(); // on declare une variable qui a comme valeur la largeur de la fenetre
+	var TAWidth = $("textarea").width(); // on declare une variable qui a comme valeur la largeur des textarea
+	var BWidth = $("button").width(); // on declare une variable qui a comme valeur la largeur des boutons
+	var wHeight = $(window).height(); // on declare une variable qui a comme valeur la hauteur de la fenetre	
+	var BHeight = $("button").height(); // on declare une variable qui a comme valeur la hauteur des boutons 
+	$("textarea").css({ // on modifie le css des textarea
+		"left" : ((wWidth-TAWidth)/2)+"px", // on donne la distance entre le bord de gauche et le bloc par un calcul
+		"height" : (wHeight/5)+"px" // la hauteur des textarea est egale a 1/5 de la fenetre
+		
+	});
+	var TAHeight = $("textarea").height(); // on declare une variable qui a comme valeur la hauteur des textarea
+	$("button").css({ // on modifie le css des boutons
+		"left" : ((wWidth-BWidth)/2)+"px" // on donne la distance entre le bord de gauche et le bouton
+	});
+});

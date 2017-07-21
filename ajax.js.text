@@ -1,0 +1,57 @@
+$(document).ready(function(){ // se lancer lorsque la page est chargé
+	//a utiliser si le navigateur ne capture pas l'evenement du click
+});
+
+
+$("#send").click(function(){ // fonction qui se lance lors du clique suru un element avec un id "send"
+	$.ajax({ //on configure l'ajax
+        async: true, //la prochaine instruction sera appelée, meme si l'action précédente n'est pas finit
+        type: 'POST', // on choisit la methode utilisé
+        dataType: 'text', // type que données que l'on attend en retour
+        data:{
+            "msg":$("#sqlRequest").val() // on enverra une variable msg qui contiendra la valeur du champ ayant l'id "sqlRequest"
+        },
+        url: "./sqlService.php", // on decide quel fichier php on execute
+        success: function (data, textStatus, jqXHR) { //si il n'y a pas d'erreur, 3 paramètres utilisés
+			var result = JSON.parse(data); // on déclare une variable result qui contient la variable data au format JSON
+			if(result.length > 0){  // si il y a un resultat
+				afficheResult(result); //on lance la fonction afficheResult avec le variable result en paramètre
+			}else{ //sinon
+				$("#result").text("Erreur dans la queteRe SQL !"); //on affiche un texte dans le bloc ayant l'id "result
+			}            
+        },
+		error: function (jqXHR, textStatus, errorThrown) { // fonction appellé si il y a une erreur
+            $("#result").text(textStatus); // on affiche TextStatus dans la zone qui a l'id "result"
+        }        
+    });
+});
+
+
+var first; // on declare une variable first
+
+function afficheResult(resultat){ // on declare une fonction qui a un paramètre
+	first = true; // on passe la variable first en vrai
+	$("#result").empty(); // on vide la zone d'affichage (zone avec l'id "result")
+	var table = document.createElement("table"); // on declare une varaible qui permettra de créer des tableaux en HTML
+	$("#result").append(table); //on fait un tableau dans la zone ayant l'id "result
+	var titre = document.createElement("tr"); // on declare une variable qui permettra de créer des balises <tr>
+	$(table).append(titre); // on ajoute une ligne <tr> dans le tableau "table"
+	$.each(resultat,function(key,value){ // on navigue dans la variable resultat qui est un tableau	
+		var line = document.createElement("tr"); // on declare une variable qui permettra de créer des balises <tr>
+		$.each(value,function(key,value){ // on navigue dans chaque case des lignes du tableau resultat
+			var cell = document.createElement("td"); // on declare une variable cell qui permettra de créer des balises <td>			
+			if(Number.isInteger(parseInt(key)) ){ //verifie si la variable key est un entier
+				$(cell).text(value); // on créer une case du tableau avec value à l'interieur
+				$(line).append(cell); // on ajoute la cellule a la ligne 
+			}else{ //sinon
+				if(first){ // si c'est la premiere ligne
+					var cellTitre = document.createElement("th"); // on crée un
+					$(cellTitre).text(key); // on ajoute une valeur a la cellule <th>
+					$(titre).append(cellTitre); // on ajoute le <th> dans le tableau 
+				}
+			}			
+		})
+		first = false; // on passe la variable first en faux
+		$(table).append(line); // on ajoute la ligne dans le tableau
+	});	
+}
